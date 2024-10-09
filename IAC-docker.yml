@@ -1,0 +1,40 @@
+---
+- hosts: docker
+  become: yes
+  tasks:
+    - name: Atualiza pacotes APT
+      apt:
+        update_cache: yes
+
+    - name: Instala pacotes de dependências
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Adiciona chave GPG oficial do Docker
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Adiciona repositório oficial do Docker
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Instala Docker e Containerd
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Inicia e habilita o serviço Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
