@@ -21,4 +21,4 @@ pip install -r requirements.txt
 ```
 3. Agora, execute a automação:
 ```
-ansible-playbook IAC-docker.yml --ask-become-pass
+ansible-playbook IAC-docker.yml -K
